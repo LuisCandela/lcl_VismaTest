@@ -1,0 +1,2 @@
+rootProject.name = "VismaTest"
+include ':app'
