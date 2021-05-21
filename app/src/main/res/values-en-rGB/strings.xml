@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">VismaTest</string>
-    <string name="greetings">Hi</string>
+    <string name="login_greetings">Welcome Leperos</string>
+    <string name="login_error">Error on google athentication</string>
 </resources>

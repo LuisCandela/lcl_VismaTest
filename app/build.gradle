@@ -3,6 +3,19 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        // This information is left here since in order to log in during development time,
+        // it is necessary to sign the app. With this, every time we launch the app
+        // we sign it and thus we can log in with Google.
+        // This code can be pulled out of the gradle for security.
+        // SHA1: 06:F8:B9:DD:01:84:16:AA:D6:1E:E3:40:86:E5:CA:F9:37:31:26:1F
+        debug {
+            storeFile file('../signature/keyStoreVisma')
+            storePassword 'vismatest'
+            keyAlias 'vismatest'
+            keyPassword 'vismatest'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -39,6 +52,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

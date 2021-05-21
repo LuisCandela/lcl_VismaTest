@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">VismaTest</string>
-    <string name="greetings">Hola</string>
+    <string name="login_greetings">Bienvenido</string>
+    <string name="login_error">Error autenticandose en google</string>
 </resources>
