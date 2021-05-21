@@ -1,20 +1,20 @@
-package com.lcl.visma.test;
+package com.lcl.visma.test.ui.login;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.lcl.visma.test.ui.main.MainFragment;
+import com.lcl.visma.test.R;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.login_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.container, LoginFragment.newInstance())
                     .commitNow();
         }
     }
