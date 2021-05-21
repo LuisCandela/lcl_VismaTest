@@ -8,7 +8,7 @@
 
         <variable
             name="loginViewModel"
-            type="com.lcl.visma.test.ui.login.LoginViewModel" />
+            type="com.lcl.visma.work.ui.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
