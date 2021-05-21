@@ -1,7 +1,11 @@
 package com.lcl.visma.test.ui.login;
 
-import androidx.lifecycle.ViewModel;
+import com.lcl.visma.test.ui.BaseViewModel;
 
-public class LoginViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+public class LoginViewModel extends BaseViewModel {
+
+    public String getText() {
+        return "DataBindinggggg!";
+    }
+
 }
