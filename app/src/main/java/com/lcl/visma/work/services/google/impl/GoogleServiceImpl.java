@@ -48,8 +48,12 @@ public class GoogleServiceImpl implements GoogleService {
     public String getSignedInName(final Context cntx) {
         GoogleSignInAccount user = GoogleSignIn.getLastSignedInAccount(cntx);
         if (user != null){
-            // change to return eMail cause rest of displayName or GivenName were empty
-            return user.getEmail();
+            String name = user.getDisplayName();
+            if(name == null || name.isEmpty()){
+                // change to return eMail cause rest of displayName or GivenName were empty
+                name = user.getEmail();
+            }
+            return name;
         }
         return "";
     }

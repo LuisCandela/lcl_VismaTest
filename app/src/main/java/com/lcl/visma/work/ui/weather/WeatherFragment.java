@@ -1,5 +1,8 @@
 package com.lcl.visma.work.ui.weather;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +14,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.adapters.AdapterViewBindingAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.lcl.visma.work.R;
 import com.lcl.visma.work.databinding.WeatherFragmentBinding;
 import com.lcl.visma.work.model.InfoAdapter;
@@ -25,11 +30,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class WeatherFragment extends Fragment implements View.OnClickListener, AdapterViewBindingAdapter.OnItemSelected, AdapterView.OnItemSelectedListener {
 
     private Spinner spinner;
     private TextView weatherInfo;
+    // Used in checking for runtime permissions.
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    private TextView locationInfo;
 
     private WeatherViewModel mViewModel;
     // generated when changed from constraintLayout to Layout on login_fragmnet
@@ -76,6 +85,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
         spinner = view.findViewById(R.id.weather_fragment_provincias_spinner);
         spinner.setOnItemSelectedListener(this);
         weatherInfo = view.findViewById(R.id.weather_fragment_weather_info);
+        locationInfo = view.findViewById(R.id.weather_fragment_location_txt);
         spinnerLoading();
     }
 
@@ -113,6 +123,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
             }
             provinciasAdapter.add(0, new InfoAdapter("-1", getString(R.string.weather_spinner_default)));
             fillProvinciasSpinner(provinciasAdapter);
+            getCurrentLocation(provincias);
         });
 
 
@@ -131,6 +142,45 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
         spinnerAdapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
+    private void getCurrentLocation(final List<Provincia> provincias) {
+
+        if (!mViewModel.checkLocationPermission(requireActivity())) {
+            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+
+        mViewModel.getCurrentLocation().addOnSuccessListener(Objects.requireNonNull(getActivity()), new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                // mViewModel.getAddress(location);
+
+                mViewModel.getAddress(location).observe(getViewLifecycleOwner(), address -> {
+                    // TODO: change to mutablelivedata from ViewModel
+                    if (address != null) {
+
+                        for (Provincia provincia : provincias) {
+                            // TODO: retrieve the provincia from the name of the https://www.el-tiempo.net/api/json/v1/municipios address.getVillage()
+                            // so we have all the provincia info
+                            if (address.getCounty() == null) {
+                                if (provincia.getComunidad_ciudad_autonoma().toLowerCase().contains(address.getState().toLowerCase())) {
+                                    showProvinciaInfo(provincia.getCod());
+                                    break;
+                                }
+                            } else {
+                                if (provincia.getNombre().toLowerCase().contains(address.getCounty().toLowerCase())) {
+                                    showProvinciaInfo(provincia.getCod());
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     /**
      * navigation to Login activity
      */
@@ -144,13 +194,23 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
         // we have the id of the province as it is stored on the infoAdapter object used on the dropDown
         InfoAdapter selected = (InfoAdapter) parent.getItemAtPosition(position);
         if (!selected.getId().equals("-1")) {
-            mViewModel.getWeatherInfo(selected.getId()).observe(this, provincia -> {
-                // TODO: change to mutablelivedata from ViewModel
-                if (provincia != null) {
-                    weatherInfo.setText(provincia.getToday().getInformacion());
-                }
-            });
+            showProvinciaInfo(selected.getId());
         }
+    }
+
+    /**
+     * show the info on the given provincia.
+     *
+     * @param proCode provincia identifier
+     */
+    private void showProvinciaInfo(final String proCode) {
+        mViewModel.getWeatherInfo(proCode).observe(this, provincia -> {
+            // TODO: change to mutablelivedata from ViewModel
+            if (provincia != null) {
+                locationInfo.setText(getString(R.string.weather_show_location_info) + " " + provincia.getProvincia().getNombre());
+                weatherInfo.setText(provincia.getToday().getInformacion());
+            }
+        });
     }
 
     @Override

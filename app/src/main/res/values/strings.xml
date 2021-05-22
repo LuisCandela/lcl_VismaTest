@@ -8,4 +8,5 @@
     <string name="weather_head_2">. Seleccione provincia para conocer la prediccion meterológica</string>
     <string name="weather_spinner_default">- Seleccione provincia</string>
     <string name="weather_spinner_loading">- cargando</string>
+    <string name="weather_show_location_info">Informacion de la provincia de</string>
 </resources>

@@ -51,7 +51,7 @@ public class WeatherServiceImpl implements WeatherService {
                 @Override
                 public void onFailure(Call<Provincias> call, Throwable t) {
                     provincias.setValue(null);
-                    Log.d("LocationsError" , "Error retrieving provincias from rest data", t);
+                    Log.d("WeatherLocationsError" , "Error retrieving provincias from rest data", t);
                 }
             });
         }
