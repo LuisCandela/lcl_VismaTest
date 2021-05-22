@@ -26,7 +26,12 @@ public interface GoogleService {
 
     /**
      * method to logOut on google.
-     * @return boolean true if sigout was correct
      */
     void logOut();
+
+    /**
+     * get the user name of the signed account
+     * @return String
+     */
+    String getSignedInName(Context cntx);
 }

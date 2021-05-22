@@ -43,4 +43,13 @@ public class GoogleServiceImpl implements GoogleService {
     public void logOut() {
         mGoogleSignInClient.signOut();
     }
+
+    @Override
+    public String getSignedInName(final Context cntx) {
+        GoogleSignInAccount user = GoogleSignIn.getLastSignedInAccount(cntx);
+        if (user != null){
+            return user.getDisplayName();
+        }
+        return "";
+    }
 }

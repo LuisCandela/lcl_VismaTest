@@ -5,4 +5,6 @@
     <string name="login_error">Error on google athentication</string>
     <string name="weather_google_logout">SingOut</string>
     <string name="logout_error">Error on google singOut</string>
+    <string name="weather_head_1">"Welcome "</string>
+    <string name="weather_head_2">" . Select province to know the weather forecast"</string>
 </resources>
