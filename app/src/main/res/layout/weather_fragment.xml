@@ -2,16 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.login.LoginFragment">
+    tools:context=".ui.weather.WeatherFragment">
 
     <data>
+
         <variable
-            name="loginViewModel"
-            type="com.lcl.visma.work.ui.login.LoginViewModel" />
+            name="weatherViewModel"
+            type="com.lcl.visma.work.ui.weather.WeatherViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+        android:id="@+id/weather"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,21 +20,12 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{loginViewModel.getText()}"
+            android:text="WeatherFragment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/login_greetings" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/login_fragment_sigin_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
