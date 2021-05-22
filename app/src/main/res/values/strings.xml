@@ -2,4 +2,6 @@
     <string name="app_name">VismaTest</string>
     <string name="login_greetings">Bienvenido</string>
     <string name="login_error">Error autenticandose en google</string>
+    <string name="weather_google_logout">SingOut</string>
+    <string name="logout_error">Error al cerrar la session en google</string>
 </resources>

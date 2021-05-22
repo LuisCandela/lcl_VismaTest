@@ -3,4 +3,6 @@
     <string name="app_name">VismaTest</string>
     <string name="login_greetings">Welcome Leperos</string>
     <string name="login_error">Error on google athentication</string>
+    <string name="weather_google_logout">SingOut</string>
+    <string name="logout_error">Error on google singOut</string>
 </resources>
