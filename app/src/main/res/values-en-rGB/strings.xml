@@ -8,4 +8,5 @@
     <string name="weather_head_1">"Welcome "</string>
     <string name="weather_head_2">" . Select province to know the weather forecast"</string>
     <string name="weather_spinner_default">- Seleccione province</string>
+    <string name="weather_spinner_loading">- loading</string>
 </resources>

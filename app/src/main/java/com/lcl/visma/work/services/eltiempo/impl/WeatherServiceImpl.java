@@ -1,5 +1,7 @@
 package com.lcl.visma.work.services.eltiempo.impl;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
@@ -9,6 +11,7 @@ import com.lcl.visma.work.services.eltiempo.WeatherService;
 import com.lcl.visma.work.services.eltiempo.api.ElTiempoAPI;
 import com.lcl.visma.work.services.eltiempo.api.response.Provincia;
 import com.lcl.visma.work.services.eltiempo.api.response.Provincias;
+import com.lcl.visma.work.services.eltiempo.api.response.TiempoProvincia;
 
 import java.util.List;
 
@@ -48,12 +51,34 @@ public class WeatherServiceImpl implements WeatherService {
                 @Override
                 public void onFailure(Call<Provincias> call, Throwable t) {
                     provincias.setValue(null);
+                    Log.d("LocationsError" , "Error retrieving provincias from rest data", t);
                 }
             });
         }
         return provincias;
     }
 
+    @Override
+    public MutableLiveData<TiempoProvincia> getWeatherInfo(final String codProv) {
+        final MutableLiveData<TiempoProvincia> tiempoProvinciaMutableLiveData = new MutableLiveData<>();
+        api.getInfoProvincia(codProv).enqueue(new Callback<TiempoProvincia>() {
+            @Override
+            public void onResponse(Call<TiempoProvincia> call, Response<TiempoProvincia> response) {
+                tiempoProvinciaMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<TiempoProvincia> call, Throwable t) {
+                tiempoProvinciaMutableLiveData.setValue(null);
+                Log.d("LocationsError" , "Error retrieving weather info from rest data", t);
+            }
+        });
+        return tiempoProvinciaMutableLiveData;
+    }
+
+    /**
+     * init the retrofit config and ElTiempoAPI
+     */
     private void getRetrofitConfiguration() {
         Gson gson = new GsonBuilder().setLenient().create();
 

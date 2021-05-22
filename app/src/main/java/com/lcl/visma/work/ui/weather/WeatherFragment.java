@@ -1,6 +1,5 @@
 package com.lcl.visma.work.ui.weather;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +20,6 @@ import com.lcl.visma.work.R;
 import com.lcl.visma.work.databinding.WeatherFragmentBinding;
 import com.lcl.visma.work.model.InfoAdapter;
 import com.lcl.visma.work.services.eltiempo.api.response.Provincia;
-import com.lcl.visma.work.ui.login.LoginActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,6 +29,8 @@ import java.util.List;
 public class WeatherFragment extends Fragment implements View.OnClickListener, AdapterViewBindingAdapter.OnItemSelected, AdapterView.OnItemSelectedListener {
 
     private Spinner spinner;
+    private TextView weatherInfo;
+
     private WeatherViewModel mViewModel;
     // generated when changed from constraintLayout to Layout on login_fragmnet
     private WeatherFragmentBinding weatherFragmentBinding;
@@ -71,9 +72,20 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
      * @param view View
      */
     private void initComponents(final View view) {
-
         view.findViewById(R.id.weather_fragmet_singout_btn).setOnClickListener(this);
         spinner = view.findViewById(R.id.weather_fragment_provincias_spinner);
+        spinner.setOnItemSelectedListener(this);
+        weatherInfo = view.findViewById(R.id.weather_fragment_weather_info);
+        spinnerLoading();
+    }
+
+    /**
+     * show loading mesage on spinner dropdown while retrieving the data
+     */
+    private void spinnerLoading() {
+        List<InfoAdapter> emptyAdapter = new ArrayList<InfoAdapter>();
+        emptyAdapter.add(new InfoAdapter("-1", getString(R.string.weather_spinner_loading)));
+        fillProvinciasSpinner(emptyAdapter);
     }
 
     @Override
@@ -90,7 +102,8 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
      * methods thrown when the view is already created
      */
     private void initView() {
-
+        // use an observe so the view can still being
+        // loaded and it doesnt have to wait to recive this data (MutableLiveData)
         mViewModel.getProvincias().observe(getViewLifecycleOwner(), provincias -> {
             List<InfoAdapter> provinciasAdapter = new ArrayList<InfoAdapter>() {
             };
@@ -105,13 +118,17 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
 
     }
 
-
+    /**
+     * method to fill the list of Provicias dropDown
+     *
+     * @param info List
+     */
     private void fillProvinciasSpinner(List<InfoAdapter> info) {
-        ArrayAdapter adaptadorSpinner = new ArrayAdapter(getContext(),
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(getContext(),
                 android.R.layout.simple_spinner_item, info);
-        adaptadorSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adaptadorSpinner);
-        adaptadorSpinner.notifyDataSetChanged();
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+        spinnerAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -119,17 +136,25 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
      */
     private void goToLogIn() {
         // TODO: change navigation to https://developer.android.com/guide/navigation/navigation-navigate ¿change to common method on baseViewModel?
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+        getActivity().finish();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // we have the id of the province as it is stored on the infoAdapter object used on the dropDown
+        InfoAdapter selected = (InfoAdapter) parent.getItemAtPosition(position);
+        if (!selected.getId().equals("-1")) {
+            mViewModel.getWeatherInfo(selected.getId()).observe(this, provincia -> {
+                // TODO: change to mutablelivedata from ViewModel
+                if (provincia != null) {
+                    weatherInfo.setText(provincia.getToday().getInformacion());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

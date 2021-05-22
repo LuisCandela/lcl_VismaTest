@@ -8,6 +8,7 @@ import com.lcl.visma.work.R;
 import com.lcl.visma.work.services.eltiempo.WeatherFactory;
 import com.lcl.visma.work.services.eltiempo.WeatherService;
 import com.lcl.visma.work.services.eltiempo.api.response.Provincia;
+import com.lcl.visma.work.services.eltiempo.api.response.TiempoProvincia;
 import com.lcl.visma.work.services.google.GoogleService;
 import com.lcl.visma.work.services.google.GoogleServiceFactory;
 import com.lcl.visma.work.ui.BaseViewModel;
@@ -37,14 +38,18 @@ public class WeatherViewModel extends BaseViewModel {
      */
     public String getHeader(){
        StringBuilder txt = new StringBuilder(cntx.getString(R.string.weather_head_1));
-       txt.append(gglSrv.getSignedInName(cntx));
-       txt.append(cntx.getString(R.string.weather_head_2));
+        txt.append(gglSrv.getSignedInName(cntx));
+        txt.append(cntx.getString(R.string.weather_head_2));
 
-       return txt.toString();
+        return txt.toString();
     }
 
     public MutableLiveData<List<Provincia>> getProvincias() {
         return provinciasMutableLiveData;
+    }
+
+    public MutableLiveData<TiempoProvincia> getWeatherInfo(String codProv) {
+        return wSrv.getWeatherInfo(codProv);
     }
 
     /**
