@@ -26,6 +26,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * service to obtain the last known location
+ * https://developer.android.com/training/location/retrieve-current
+ */
 public class LocationServiceImpl implements LocationService {
 
     private LocationAPI api;
@@ -70,7 +74,7 @@ public class LocationServiceImpl implements LocationService {
 
 
     /**
-     * init the retrofit config and ElTiempoAPI
+     * init the retrofit config and LocationAPI
      */
     private void getRetrofitConfiguration() {
         Gson gson = new GsonBuilder().setLenient().create();
