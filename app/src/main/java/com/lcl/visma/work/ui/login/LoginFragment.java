@@ -19,11 +19,19 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.lcl.visma.work.R;
 import com.lcl.visma.work.databinding.LoginFragmentBinding;
+import com.lcl.visma.work.services.testInject.TestService;
 import com.lcl.visma.work.ui.weather.WeatherActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class LoginFragment extends Fragment implements View.OnClickListener {
+    @Inject
+    public TestService testSrv;
 
     private LoginViewModel mViewModel;
     // identifier when sending-return to google intent
