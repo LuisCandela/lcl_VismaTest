@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,6 +18,8 @@ import com.lcl.visma.work.services.location.LocationService;
 import com.lcl.visma.work.services.location.api.LocationAPI;
 import com.lcl.visma.work.services.location.api.response.Address;
 import com.lcl.visma.work.services.location.api.response.InfoLocation;
+
+import javax.inject.Inject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -34,7 +37,10 @@ public class LocationServiceImpl implements LocationService {
 
     private LocationAPI api;
 
-    public LocationServiceImpl() { getRetrofitConfiguration(); }
+    @Inject
+    public LocationServiceImpl() {
+    //    getRetrofitConfiguration();
+    }
 
     /**
      * Provides access to the Fused Location Provider API.
@@ -46,16 +52,27 @@ public class LocationServiceImpl implements LocationService {
     @SuppressLint("MissingPermission")
     @Override
     public Task<Location> getLastLocation(final Context cntx) {
-        if (mFusedLocationClient == null) {
+        // FusedLocationProviderClient mFusedLocationClient = null;
+        //if (mFusedLocationClient == null) {
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(cntx);
-        }
+        //}
+        /*
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(cntx.getApplicationContext(),new OnSuccessListener<Location>() {
+
+            @Override
+            public void onSuccess(Location location) {
+
+            }
+        } );
+        */
+
         return mFusedLocationClient.getLastLocation();
     }
 
     @Override
     public MutableLiveData<Address> getLocation(final double latitude,final double longitude) {
         location = new MutableLiveData<Address>();
-        api.getGeoReverse(latitude, longitude, "jsonv2").enqueue(new Callback<InfoLocation>() {
+        getApi().getGeoReverse(latitude, longitude, "jsonv2").enqueue(new Callback<InfoLocation>() {
             @Override
             public void onResponse(Call<InfoLocation> call, Response<InfoLocation> response) {
                 if (response.body() != null && response.body().getAddress() != null) {
@@ -76,21 +93,23 @@ public class LocationServiceImpl implements LocationService {
     /**
      * init the retrofit config and LocationAPI
      */
-    private void getRetrofitConfiguration() {
-        Gson gson = new GsonBuilder().setLenient().create();
+    private LocationAPI getApi() {
+        // if (api == null) {
+            Gson gson = new GsonBuilder().setLenient().create();
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.level(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.level(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.URL_NOMONATIM)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-        if (api == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(BuildConfig.URL_NOMONATIM)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+
             api = retrofit.create(LocationAPI.class);
-        }
+        //  }
+        return api;
     }
 
 }

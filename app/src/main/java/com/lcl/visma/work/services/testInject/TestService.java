@@ -1,17 +1,8 @@
 package com.lcl.visma.work.services.testInject;
 
-import javax.inject.Inject;
+import dagger.Provides;
 
-public class TestService {
+public interface TestService {
 
-    private String a = "Hola";
-
-    @Inject
-    public TestService(){
-        a = "Hola2";
-    }
-
-    public String getA(){
-        return a;
-    }
+    String getData();
 }

@@ -8,10 +8,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.lcl.visma.work.services.google.GoogleService;
 
+import javax.inject.Inject;
+
+import dagger.Provides;
+
 /**
  * interface with methods to call google services
  */
 public class GoogleServiceImpl implements GoogleService {
+
+    @Inject
+    public GoogleServiceImpl(){}
+
 
     private GoogleSignInClient mGoogleSignInClient;
 

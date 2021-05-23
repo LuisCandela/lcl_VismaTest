@@ -25,6 +25,7 @@ import com.lcl.visma.work.R;
 import com.lcl.visma.work.databinding.WeatherFragmentBinding;
 import com.lcl.visma.work.model.InfoAdapter;
 import com.lcl.visma.work.services.eltiempo.api.response.Provincia;
+import com.lcl.visma.work.ui.BaseFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -154,29 +155,30 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
         mViewModel.getCurrentLocation().addOnSuccessListener(Objects.requireNonNull(getActivity()), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                // mViewModel.getAddress(location);
+                if(location != null){
+                    mViewModel.getAddress(location).observe(getViewLifecycleOwner(), address -> {
+                        // TODO: change to mutablelivedata from ViewModel
+                        // check the address object has info on it
+                        if (address != null && !address.getCountry().isEmpty()) {
 
-                mViewModel.getAddress(location).observe(getViewLifecycleOwner(), address -> {
-                    // TODO: change to mutablelivedata from ViewModel
-                    if (address != null) {
-
-                        for (Provincia provincia : provincias) {
-                            // TODO: retrieve the provincia from the name of the https://www.el-tiempo.net/api/json/v1/municipios address.getVillage()
-                            // so we have all the provincia info
-                            if (address.getCounty() == null) {
-                                if (provincia.getComunidad_ciudad_autonoma().toLowerCase().contains(address.getState().toLowerCase())) {
-                                    showProvinciaInfo(provincia.getCod());
-                                    break;
-                                }
-                            } else {
-                                if (provincia.getNombre().toLowerCase().contains(address.getCounty().toLowerCase())) {
-                                    showProvinciaInfo(provincia.getCod());
-                                    break;
+                            for (Provincia provincia : provincias) {
+                                // TODO: retrieve the provincia from the name of the https://www.el-tiempo.net/api/json/v1/municipios address.getVillage()
+                                // so we have all the provincia info
+                                if (address.getCounty() == null) {
+                                    if (provincia.getComunidad_ciudad_autonoma().toLowerCase().contains(address.getState().toLowerCase())) {
+                                        showProvinciaInfo(provincia.getCod());
+                                        break;
+                                    }
+                                } else {
+                                    if (provincia.getNombre().toLowerCase().contains(address.getCounty().toLowerCase())) {
+                                        showProvinciaInfo(provincia.getCod());
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     }

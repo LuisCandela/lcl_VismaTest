@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.lcl.visma.work.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+// @AndroidEntryPoint
 public class WeatherActivity extends AppCompatActivity {
 
     @Override

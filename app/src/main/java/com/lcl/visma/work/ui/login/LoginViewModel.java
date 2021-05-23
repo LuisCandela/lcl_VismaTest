@@ -7,19 +7,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.lcl.visma.work.R;
 import com.lcl.visma.work.services.google.GoogleService;
 import com.lcl.visma.work.services.google.GoogleServiceFactory;
+import com.lcl.visma.work.ui.BaseFragment;
 import com.lcl.visma.work.ui.BaseViewModel;
 
+import javax.inject.Inject;
+
 public class LoginViewModel extends BaseViewModel {
-
-    private Context cntx;
-
-    // TODO: see dependencies injection
-    private GoogleService gglSrv;
-
-    protected void initViewModel(final Context cntx) {
-        this.cntx = cntx;
-        // TODO: see dependencies injection Hilt
-        gglSrv = GoogleServiceFactory.getInstance();
+    protected Context cntx;
+    protected void initViewModel(final BaseFragment fragment) {
+        this.cntx = fragment.getContext();
+        gglSrv = fragment.getGoogleService();
     }
 
     public String getText() {

@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.Task;
 import com.lcl.visma.work.R;
 import com.lcl.visma.work.databinding.LoginFragmentBinding;
 import com.lcl.visma.work.services.testInject.TestService;
+import com.lcl.visma.work.services.testInject.TestServiceImpl;
+import com.lcl.visma.work.ui.BaseFragment;
 import com.lcl.visma.work.ui.weather.WeatherActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,10 +30,8 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-@AndroidEntryPoint
-public class LoginFragment extends Fragment implements View.OnClickListener {
-    @Inject
-    public TestService testSrv;
+
+public class LoginFragment extends BaseFragment implements View.OnClickListener {
 
     private LoginViewModel mViewModel;
     // identifier when sending-return to google intent
@@ -52,7 +52,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         final View view = loginFragmentBinding.getRoot();
         initComponents(view);
-
         return view;
     }
 
@@ -61,7 +60,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         // set the context app to use of services
-        mViewModel.initViewModel(getContext());
+        mViewModel.initViewModel(this);
         // pass the private variable to the xml view
         loginFragmentBinding.setLoginViewModel(mViewModel);
 

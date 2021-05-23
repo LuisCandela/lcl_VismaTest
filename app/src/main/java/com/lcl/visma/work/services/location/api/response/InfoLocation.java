@@ -7,7 +7,7 @@ public class InfoLocation {
     private int place_id;
     private String licence;
     private String osm_type;
-    private int osm_id;
+    private long osm_id;
     private String lat;
     private String lon;
     private int place_rank;
@@ -32,7 +32,7 @@ public class InfoLocation {
         return osm_type;
     }
 
-    public int getOsm_id() {
+    public long getOsm_id() {
         return osm_id;
     }
 

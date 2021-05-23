@@ -18,28 +18,23 @@ import com.lcl.visma.work.services.location.LocationFactory;
 import com.lcl.visma.work.services.location.LocationService;
 import com.lcl.visma.work.services.location.api.response.Address;
 import com.lcl.visma.work.services.permision.PermissionService;
+import com.lcl.visma.work.ui.BaseFragment;
 import com.lcl.visma.work.ui.BaseViewModel;
 
 import java.util.List;
 
 public class WeatherViewModel extends BaseViewModel {
 
-    private Context cntx;
-
     private MutableLiveData<List<Provincia>> provinciasMutableLiveData;
-
-    // TODO: see dependencies injection
-    private GoogleService gglSrv;
-    private WeatherService wSrv;
-    private LocationService locSrv;
-
+    private Context cntx;
     protected void initViewModel(final Context cntx) {
         this.cntx = cntx;
-        // TODO: see dependencies injection
         gglSrv = GoogleServiceFactory.getInstance();
         wSrv = WeatherFactory.getInstance();
-        locSrv = LocationFactory.getInstance();
-
+        // gglSrv = fragment.getGoogleService();
+        // wSrv = fragment.getWeatherService();
+        // locSrv = fragment.getLocationService();
+        // locSrv = LocationFactory.getInstance();
         provinciasMutableLiveData = wSrv.getLocations();
     }
 
@@ -79,19 +74,13 @@ public class WeatherViewModel extends BaseViewModel {
      * @return MutableLiveData<Address>
      */
     public Task<Location> getCurrentLocation() {
-
-        return locSrv.getLastLocation(cntx);
+        return LocationFactory.getInstance().getLastLocation(cntx);
+       // return locSrv.getLastLocation(cntx);
     }
 
     public MutableLiveData<Address> getAddress(final Location location) {
-
-        double latitude = 0d;
-        double longitude = 0d;
-        if (location != null){
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-        }
-        return locSrv.getLocation(latitude, longitude);
+        return LocationFactory.getInstance().getLocation(location.getLatitude(), location.getLongitude());
+       // return locSrv.getLocation(location.getLatitude(), location.getLongitude());
     }
 
     /**
