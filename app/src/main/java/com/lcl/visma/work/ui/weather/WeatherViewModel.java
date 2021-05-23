@@ -1,6 +1,5 @@
 package com.lcl.visma.work.ui.weather;
 
-import android.content.Context;
 import android.location.Location;
 
 import androidx.fragment.app.FragmentActivity;
@@ -8,38 +7,25 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Task;
 import com.lcl.visma.work.R;
-import com.lcl.visma.work.services.eltiempo.WeatherFactory;
-import com.lcl.visma.work.services.eltiempo.WeatherService;
 import com.lcl.visma.work.services.eltiempo.api.response.Provincia;
 import com.lcl.visma.work.services.eltiempo.api.response.TiempoProvincia;
-import com.lcl.visma.work.services.google.GoogleService;
-import com.lcl.visma.work.services.google.GoogleServiceFactory;
-import com.lcl.visma.work.services.location.LocationFactory;
-import com.lcl.visma.work.services.location.LocationService;
 import com.lcl.visma.work.services.location.api.response.Address;
 import com.lcl.visma.work.services.permision.PermissionService;
+import com.lcl.visma.work.ui.BaseFragment;
 import com.lcl.visma.work.ui.BaseViewModel;
 
 import java.util.List;
 
 public class WeatherViewModel extends BaseViewModel {
 
-    private Context cntx;
-
     private MutableLiveData<List<Provincia>> provinciasMutableLiveData;
 
-    // TODO: see dependencies injection
-    private GoogleService gglSrv;
-    private WeatherService wSrv;
-    private LocationService locSrv;
+    protected void initViewModel(final BaseFragment fragment) {
 
-    protected void initViewModel(final Context cntx) {
-        this.cntx = cntx;
-        // TODO: see dependencies injection
-        gglSrv = GoogleServiceFactory.getInstance();
-        wSrv = WeatherFactory.getInstance();
-        locSrv = LocationFactory.getInstance();
-
+        gglSrv = fragment.getGoogleService();
+        wSrv = fragment.getWeatherService();
+        locSrv = fragment.getLocationService();
+        this.cntx = fragment.getContext();
         provinciasMutableLiveData = wSrv.getLocations();
     }
 
@@ -84,10 +70,12 @@ public class WeatherViewModel extends BaseViewModel {
     }
 
     public MutableLiveData<Address> getAddress(final Location location) {
+        // due to problem returning Location null on last test
+        // if location is null we use Visma Address on Avenida de Bruselas
 
-        double latitude = 0d;
-        double longitude = 0d;
-        if (location != null){
+        double latitude = 40.53082555d;
+        double longitude = -3.633256878543686d;
+        if (location != null) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
         }

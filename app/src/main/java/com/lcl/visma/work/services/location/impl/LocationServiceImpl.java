@@ -18,6 +18,8 @@ import com.lcl.visma.work.services.location.api.LocationAPI;
 import com.lcl.visma.work.services.location.api.response.Address;
 import com.lcl.visma.work.services.location.api.response.InfoLocation;
 
+import javax.inject.Inject;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -34,6 +36,7 @@ public class LocationServiceImpl implements LocationService {
 
     private LocationAPI api;
 
+    @Inject
     public LocationServiceImpl() { getRetrofitConfiguration(); }
 
     /**

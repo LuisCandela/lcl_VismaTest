@@ -2,6 +2,9 @@ package com.lcl.visma.work.services.eltiempo;
 
 import com.lcl.visma.work.services.eltiempo.impl.WeatherServiceImpl;
 
+/**
+ * @deprecated false Injection. user @Inject
+ */
 public class WeatherFactory {
 
     private static WeatherService wServ;

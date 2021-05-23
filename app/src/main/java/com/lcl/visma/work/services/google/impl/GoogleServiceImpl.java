@@ -8,12 +8,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.lcl.visma.work.services.google.GoogleService;
 
+import javax.inject.Inject;
+
 /**
  * interface with methods to call google services
  */
 public class GoogleServiceImpl implements GoogleService {
 
-    private GoogleSignInClient mGoogleSignInClient;
+    @Inject
+    public GoogleServiceImpl() {
+    }
+    // fail with injection if not static
+    // TODO: see how to reuse class fields with injection
+    private static GoogleSignInClient mGoogleSignInClient;
 
     @Override
     public GoogleSignInAccount authenticate(final Context cntx) {

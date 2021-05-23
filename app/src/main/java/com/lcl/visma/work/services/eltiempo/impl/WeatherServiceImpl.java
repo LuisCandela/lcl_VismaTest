@@ -15,6 +15,8 @@ import com.lcl.visma.work.services.eltiempo.api.response.TiempoProvincia;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -32,6 +34,7 @@ public class WeatherServiceImpl implements WeatherService {
 
     private MutableLiveData<List<Provincia>> provincias;
 
+    @Inject
     public WeatherServiceImpl(){
         getRetrofitConfiguration();
     }

@@ -2,6 +2,9 @@ package com.lcl.visma.work.services.location;
 
 import com.lcl.visma.work.services.location.impl.LocationServiceImpl;
 
+/**
+ * @deprecated false Injection. user @Inject
+ */
 public class LocationFactory {
 
     private static LocationService lSrv;

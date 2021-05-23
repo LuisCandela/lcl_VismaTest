@@ -3,7 +3,7 @@ package com.lcl.visma.work.services.google;
 import com.lcl.visma.work.services.google.impl.GoogleServiceImpl;
 
 /**
- * class to return the same instance of GoogleService
+ * @deprecated false Injection. user @Inject
  */
 public class GoogleServiceFactory {
 

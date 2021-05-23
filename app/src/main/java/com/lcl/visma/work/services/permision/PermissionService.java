@@ -7,6 +7,9 @@ import android.content.pm.PackageManager;
 
 import androidx.core.app.ActivityCompat;
 
+/**
+ * class to check permissions
+ */
 public class PermissionService {
 
     public static boolean isLocationPermissionGranted(Context context) {

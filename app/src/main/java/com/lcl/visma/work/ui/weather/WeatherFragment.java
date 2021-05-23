@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.adapters.AdapterViewBindingAdapter;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,6 +24,7 @@ import com.lcl.visma.work.R;
 import com.lcl.visma.work.databinding.WeatherFragmentBinding;
 import com.lcl.visma.work.model.InfoAdapter;
 import com.lcl.visma.work.services.eltiempo.api.response.Provincia;
+import com.lcl.visma.work.ui.BaseFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,12 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class WeatherFragment extends Fragment implements View.OnClickListener, AdapterViewBindingAdapter.OnItemSelected, AdapterView.OnItemSelectedListener {
+public class WeatherFragment extends BaseFragment implements View.OnClickListener, AdapterViewBindingAdapter.OnItemSelected, AdapterView.OnItemSelectedListener {
+
+    // Used in checking for runtime permissions.
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
     private Spinner spinner;
     private TextView weatherInfo;
-    // Used in checking for runtime permissions.
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private TextView locationInfo;
 
     private WeatherViewModel mViewModel;
@@ -67,7 +68,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
         // set the context app to use of services
-        mViewModel.initViewModel(getContext());
+        mViewModel.initViewModel(this);
         // pass the private variable to the xml view
         weatherFragmentBinding.setWeatherViewModel(mViewModel);
 
@@ -90,7 +91,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
     }
 
     /**
-     * show loading mesage on spinner dropdown while retrieving the data
+     * show loading message on spinner dropdown while retrieving the data
      */
     private void spinnerLoading() {
         List<InfoAdapter> emptyAdapter = new ArrayList<InfoAdapter>();
@@ -125,8 +126,6 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
             fillProvinciasSpinner(provinciasAdapter);
             getCurrentLocation(provincias);
         });
-
-
     }
 
     /**
@@ -154,11 +153,10 @@ public class WeatherFragment extends Fragment implements View.OnClickListener, A
         mViewModel.getCurrentLocation().addOnSuccessListener(Objects.requireNonNull(getActivity()), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                // mViewModel.getAddress(location);
-
                 mViewModel.getAddress(location).observe(getViewLifecycleOwner(), address -> {
                     // TODO: change to mutablelivedata from ViewModel
-                    if (address != null) {
+                    // check the address object has info on it
+                    if (address != null && !address.getCountry().isEmpty()) {
 
                         for (Provincia provincia : provincias) {
                             // TODO: retrieve the provincia from the name of the https://www.el-tiempo.net/api/json/v1/municipios address.getVillage()
